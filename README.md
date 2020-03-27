@@ -27,27 +27,6 @@ ___
       )
 ```
 ___
-### /candidate-votes
-```
-/candidate-votes [POST]
-    - POST data with proposal votes, accepts json body (
-        "member_ID": int,
-        "votes": {
-          {
-            "candidate_ID": int,
-            "value": int
-          },
-          {
-            "candidate_ID": int,
-            "value": int
-          },
-          .
-          .
-          .
-        }
-      )
-```
-___
 ### /sabats
 ```
 /sabats				[GET]
@@ -89,5 +68,26 @@ ___
 /regional-cells/{ID}/sabats [GET]
     - GET list of all upcoming sabats for regional cell with {ID}
 
+```
+___
+### /candidate-votes
+```
+/candidate-votes [POST]
+    - POST data with proposal votes, accepts json body (
+        "member_ID": int,
+        "votes": {
+          {
+            "candidate_ID": int,
+            "value": int
+          },
+          {
+            "candidate_ID": int,
+            "value": int
+          },
+          .
+          .
+          .
+        }
+      )
 ```
 ___

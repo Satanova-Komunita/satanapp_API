@@ -11,8 +11,8 @@ use \Firebase\JWT\JWT;
 /**
  * Define global used constants by this file
  */
-define('key', "SatanovaKomunit4JW7");
-define('iss', "https://satanovakomunita.cz");
+define('key', "");
+define('iss', "");
 
 /**
  * Creates refresh JWT by $user's own parameters

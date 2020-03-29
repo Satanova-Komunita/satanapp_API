@@ -186,21 +186,12 @@ class Api
     switch ($this->method)
     {
       case 'GET':
-        if ($this->subject === 'invoices')
+        if ($this->ID === null)
+          return $sabat->read();
+        else if ($this->subject === 'proposals' || $this->subject === 'candidates')
         {
-          if (
-            $this->ID === $this->jwt->sub ||
-            $this->isFirmOwner($db, $this->ID)
-          ){
-            $user->ID = $this->ID;
-            return $user->readInvoices();
-          }
-          raise403("Can't view someone else's invoices.");
-        }
-        elseif ($this->ID != null)
-        {
-          $user->ID = $this->ID;
-          return $user->readOne();
+          $sabat->ID = $this->ID;
+          return $sabat->readSubject($this->subject);
         }
         else
           return ret406();
@@ -210,15 +201,18 @@ class Api
         
         if (
           $this->ID !== null &&
-          (!empty($data->description) && !empty($data->name))
+          (!empty($data->description) && !empty($data->name)) ||
+          (!empty($data->role_ID) && !empty($data->member_ID))
         ){
           if ($this->subject === 'candidates')
           {
+            $sabat->ID = $this->ID;
             $sabat->roleID = sanitize($data->role_ID);
             $sabat->memberID = sanitize($data->member_ID);
           }
           else if ($this->subject === 'proposals')
           {
+            $sabat->ID = $this->ID;
             $sabat->name = sanitize($data->name);
             $sabat->description = sanitize($data->description);
             $sabat->memberID = $this->jwt->sub;

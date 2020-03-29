@@ -9,25 +9,25 @@ class Database
    *
    * @var string
    */
-  private $host = '';
+  private $host = '127.0.0.1:8889';
   /**
    * Database we are trying to connect to
    *
    * @var string
    */
-  private $dbName = '';
+  private $dbName = 'satan';
   /**
    * Username used as credentials
    *
    * @var string
    */
-  private $username = '';
+  private $username = 'root';
   /**
    * Password used as credentials
    *
    * @var string
    */
-  private $password = '';
+  private $password = 'root';
   /**
    * Connection to database
    *

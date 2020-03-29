@@ -253,7 +253,7 @@ class Api
             "JWT" => $token,
             "userData" => array(
               "ID" => $user['ID'],
-              "email" => $user['member_number']
+              "member_number" => $user['member_number']
             )
           ));
         }

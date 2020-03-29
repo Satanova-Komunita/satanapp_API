@@ -4,4 +4,4 @@ libs/php-jwt/
 
 config/
 
-auth.php
+resources/auth.php

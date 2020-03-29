@@ -64,10 +64,10 @@ class Sabat
     {
       $query = "SELECT ID, name, description
         FROM Sabat_proposals
-        WHERE technicianID=?";
+        WHERE sabat_ID=?";
     } else if ($subject === 'candidates')
     {
-      $query = "SELECT ID, member_ID, roleID
+      $query = "SELECT ID, member_ID, role_ID
         FROM Member_role_candidates
         WHERE sabat_ID=?";
     } else 
@@ -103,7 +103,7 @@ class Sabat
             "ID" => $ID,
             "member_ID" => $member_ID,
             "role_ID" => $role_ID
-          )
+          );
         }
 
         array_push($responseArr, $subjectVar);
@@ -122,7 +122,6 @@ class Sabat
         "data" => array(
           "message" => "Žádna data nenalezena."
         )
-        
       );
     }
   }
@@ -140,23 +139,31 @@ class Sabat
     $stmt = $this->conn->prepare($query);
 
     $stmt->execute();
-    
-    $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if (!empty($row['regional_cell_ID']))
+    $num = $stmt->rowCount();
+    if ($num > 0)
     {
-      $sabat = array(
-        "ID" => $row['ID'],
-        "regional_cell_ID" => $row['regional_cell_ID'],
-        "date" => $row['date']
-      );
+      $responseArr = array();
+
+      while ($row = $stmt->fetch(PDO::FETCH_ASSOC))
+      {
+        extract($row);
+
+        $sabat = array(
+          "ID" => $row['ID'],
+          "regional_cell_ID" => $row['regional_cell_ID'],
+          "date" => $row['date']
+        );
+
+        array_push($responseArr, $sabat);
+      }
+
       return array(
         "status" => 200,
         "statusMsg" => "OK",
-        "data" => $sabat
+        "data" => $responseArr
       );
-    }
-    else
+    } else
     {
       return array(
         "status" => 200,

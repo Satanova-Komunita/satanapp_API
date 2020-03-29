@@ -35,7 +35,6 @@ ___
 /sabats/{ID}/proposals  [GET, POST]
     - GET list of all proposals for sabat with {ID}
     - POST new proposal to database, accepts json body (
-        "member_ID": int,
         "name": "string",
         "description": "string"
       )

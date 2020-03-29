@@ -124,28 +124,65 @@ class Api
     switch ($this->object)
     {
       case 'proposal-votes':
-        return $this->usersResponse($db);
+        return $this->proposalVotesResponse($db);
         break;
       case 'sabats':
-        return $this->usersResponse($db);
+        return $this->sabatsResponse($db);
         break;
       case 'login':
         return $this->loginResponse($db);
         break;
     }
   }
+  /** 
+   * Includes Proposal_votes file, initializes new instance of its class and
+   * tries to add new votes to DB
+   *
+   * @param Database $db
+   * @return void
+   */ 
+  private function proposalVotesResponse ($db)
+  {
+    
+    include_once('./objects/proposal_votes.php');
+    $propVotes = new ProposalVotes($db);
+    switch ($this->method)
+    {
+    case 'POST':
+      $data = json_decode(file_get_contents('php://input'));
+      if (
+        !empty($data->votes) &&
+        $this->ID === null
+      ){
+        $propVotes->member_ID = $this->jwt->data['member_number'];
+          /**
+           *
+           *
+           *
+           * TODO: implement adding votes for every record in $data->votes
+           *
+           *
+           *
+           */
 
+        return $propVotes->add();
+      }
+      else
+        return ret406();
+      break;
+    }
+  }
   /**
-   * Includes User file, initializes new instance of its class and performs
+   * Includes Sabats file, initializes new instance of its class and performs
    * action depending on used method, specified subject and passed data from user
    *
    * @param Database $db
    * @return void
    */
-  private function usersResponse ($db)
+  private function sabatsResponse ($db)
   {
-    include_once('./objects/users.php');
-    $user = new User($db);
+    include_once('./objects/sabats.php');
+    $sabat = new Sabat($db);
     switch ($this->method)
     {
       case 'GET':
@@ -168,52 +205,29 @@ class Api
         else
           return ret406();
         break;
-      case 'PUT':
-        include_once './resources/auth.php';
+      case 'POST':
         $data = json_decode(file_get_contents('php://input'));
+        
         if (
-          !empty($data->firstName) &&
-          !empty($data->lastName) &&
-          !empty($data->email)
+          $this->ID !== null &&
+          (!empty($data->description) && !empty($data->name))
         ){
-          if ($this->ID != $this->jwt->sub)
-            raise403("Can't modify someone else's info");
-          $user->firstName = sanitize($data->firstName);
-          $user->lastName = sanitize($data->lastName);
-          $user->email = sanitize($data->email);
-          $user->ID = $this->ID;
-          $response = $user->update();
-          if ($response['status'] === 200)
+          if ($this->subject === 'candidates')
           {
-            $userData = array(
-              "firstName" => $user->firstName,
-              "lastName" => $user->lastName,
-              "email" => $user->email,
-              "ID" => $user-ID
-            );
-            $refreshToken = createRefreshToken($userData);
-            $this->setRefreshJWTinDatabase($userData['email'], $refreshToken);
-            response(200, "OK", array(
-              "refreshJWT" => $refreshToken,
-              "userData" => array(
-                "ID" => $userData['ID'],
-                "firstName" => $userData['firstName'],
-                "lastName" => $userData['lastName'],
-                "email" => $userData['email']
-              )
-            ));
+            $sabat->roleID = sanitize($data->role_ID);
+            $sabat->memberID = sanitize($data->member_ID);
           }
-          else
-            return $response;
+          else if ($this->subject === 'proposals')
+          {
+            $sabat->name = sanitize($data->name);
+            $sabat->description = sanitize($data->description);
+            $sabat->memberID = $this->jwt->sub;
+          }
+
+          return $sabat->create($this->subject);
         }
         else
           return ret406();
-        break;
-      case 'DELETE':
-        if ($this->ID != $this->jwt->sub)
-          raise403("Can't delete someone else");
-        $user->ID = $this->ID;
-        return $user->delete();
         break;
     }
   }

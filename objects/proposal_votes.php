@@ -58,13 +58,13 @@ class ProposalVote
       return array(
         "status" => 201,
         "statusMsg" => "Created",
-        "data" => array("message" => "Hlasy byly úspěšně zaznamenány.")
+        "data" => array("message" => "Hlas(y) byl(y) úspěšně zaznamenán(y).")
       );
     else
       return array(
         "status" => 503,
         "statusMsg" => "Service unavailable",
-        "data" => array("message" => "Nepodařilo se zaznamenat hlasy.")
+        "data" => array("message" => "Nepodařilo se zaznamenat hlas(y).")
       );
   }
 }

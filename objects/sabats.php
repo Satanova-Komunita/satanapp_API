@@ -58,7 +58,7 @@ class Sabat
    *
    * @return array
    */
-  function readSubject ($subject)
+  public function readSubject ($subject)
   {
     if ($subject === 'proposals')
     {
@@ -141,7 +141,7 @@ class Sabat
    *
    * @return array
    */
-  function read ()
+  public function read ()
   {
     $query = "SELECT ID, regional_cell_ID, date
       FROM Sabats";
@@ -188,7 +188,7 @@ class Sabat
    *
    * @return array
    */
-  function create ($subject)
+  public function create ($subject)
   {
     if ($subject === 'proposals')
     {

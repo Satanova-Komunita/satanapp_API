@@ -76,7 +76,7 @@ class Api
   {
     switch ($this->object)
     {
-      case 'propsal-votes':
+      case 'proposal-votes':
         if ($this->ID === null)
           return true;
         else
@@ -143,33 +143,30 @@ class Api
    */ 
   private function proposalVotesResponse ($db)
   {
-    
     include_once('./objects/proposal_votes.php');
-    $propVotes = new ProposalVotes($db);
+    $propVote = new ProposalVote($db);
     switch ($this->method)
     {
     case 'POST':
       $data = json_decode(file_get_contents('php://input'));
       if (
-        !empty($data->votes) &&
-        $this->ID === null
+        !empty($data->member_ID) &&
+        is_array($data->votes) &&
+        !empty($data->votes[0]->proposal_ID)
       ){
-        $propVotes->member_ID = $this->jwt->data['member_number'];
-          /**
-           *
-           *
-           *
-           * TODO: implement adding votes for every record in $data->votes
-           *
-           *
-           *
-           */
+        $d = new DateTime('now', new DateTimeZone('Europe/Prague'));
 
-        return $propVotes->add();
+        $propVote->memberID = sanitize($data->member_ID);
+        $propVote->votes = $data->votes;
+        $propVote->createdAt = $d->format('Y-m-d H:i:s');
+
+        return $propVote->addVotes();
       }
       else
         return ret406();
       break;
+    default:
+      response(405, "Method not allowed", null);
     }
   }
   /**
@@ -223,6 +220,8 @@ class Api
         else
           return ret406();
         break;
+      default:
+        response(405, "Method Not Allowed", null);
     }
   }
   /**

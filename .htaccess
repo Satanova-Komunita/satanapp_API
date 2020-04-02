@@ -1,6 +1,6 @@
 RewriteEngine On
 
-RewriteRule ^api/([A-Za-z]*)/?$ index.php?object=$1 [L]
-RewriteRule ^api/([A-Za-z]*)/([0-9]*)/?$ index.php?object=$1&ID=$2 [L]
-RewriteRule ^api/([A-Za-z]*)/([0-9]*)/([A-Za-z]*)/?$ index.php?object=$1&ID=$2&sub=$3 [L]
-RewriteRule ^api/([A-Za-z]*)/([0-9]*)/([A-Za-z]*)/([0-9]*)/?$ index.php?object=$1&ID=$2&sub=$3&subID=$4 [L]
+RewriteRule ^api/([A-Za-z-]*)/?$ index.php?object=$1 [L]
+RewriteRule ^api/([A-Za-z-]*)/([0-9]*)/?$ index.php?object=$1&ID=$2 [L]
+RewriteRule ^api/([A-Za-z-]*)/([0-9]*)/([A-Za-z-]*)/?$ index.php?object=$1&ID=$2&sub=$3 [L]
+RewriteRule ^api/([A-Za-z-]*)/([0-9]*)/([A-Za-z-]*)/([0-9]*)/?$ index.php?object=$1&ID=$2&sub=$3&subID=$4 [L]

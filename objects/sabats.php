@@ -67,8 +67,15 @@ class Sabat
         WHERE sabat_ID=?";
     } else if ($subject === 'candidates')
     {
-      $query = "SELECT ID, member_ID, role_ID
+      $query = "SELECT Member_role_candidates.ID as `ID`,
+          Member_role_candidates.member_ID as `member_ID`,
+          Members.first_name as `first_name`,
+          Members.last_name as `last_name`,
+          Member_role_candidates.role_ID as `role_ID`,
+          Roles.name as `role_name`
         FROM Member_role_candidates
+        LEFT JOIN Members ON Members.ID = Member_role_candidates.member_ID
+        LEFT JOIN Roles ON Roles.ID = Member_role_candidates.role_ID
         WHERE sabat_ID=?";
     } else 
     {
@@ -102,7 +109,10 @@ class Sabat
           $subjectVar = array(
             "ID" => $ID,
             "member_ID" => $member_ID,
-            "role_ID" => $role_ID
+            "role_ID" => $role_ID,
+            "first_name" => $first_name,
+            "last_name" => $last_name,
+            "role_name" => $role_name
           );
         }
 

@@ -56,7 +56,7 @@ class ProposalVote
         SET member_ID=".$this->memberID.",
             sabat_proposal_ID=".$vote->proposal_ID.",
             created_at=\"".$this->createdAt."\",
-            value=".$vote->votes.";";
+            value=".$vote->value.";";
     }
 
     if ($this->hasNotVoted($this->votes[0]->proposal_ID))

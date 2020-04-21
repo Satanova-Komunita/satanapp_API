@@ -14,11 +14,11 @@ ___
         "votes": {
           {
             "proposal_ID": int,
-            "votes": int
+            "value": int
           },
           {
             "proposal_ID": int,
-            "votes": int
+            "value": int
           },
           .
           .

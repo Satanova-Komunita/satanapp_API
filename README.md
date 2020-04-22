@@ -90,3 +90,22 @@ ___
       )
 ```
 ___
+
+## Local environment
+
+### Requirements
+- docker
+- docker compose
+
+### Start
+
+```sh
+docker-compose -f docker/local/docker-compose.yml up
+```
+
+### Postinstall
+
+- rewrite db host in config
+- import db schema
+
+open http://localhost:8080

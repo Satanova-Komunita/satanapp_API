@@ -1,0 +1,6 @@
+.DS_Store
+libs/php-jwt
+config/
+resources/auth.php
+docker/local/storage/mysql/*
+!docker/local/storage/mysql/.gitkeep

@@ -1,7 +1,0 @@
-.DS_Store
-
-libs/php-jwt/
-
-config/
-
-resources/auth.php

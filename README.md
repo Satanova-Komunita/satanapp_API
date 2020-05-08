@@ -47,6 +47,12 @@ ___
       )
 ```
 ___
+### /sabat-results
+```
+/sabat-results/{ID}/proposals  [GET]
+    - GET sabat results (works only if voting has ended)
+```
+___
 ### /login
 ```
 /login          [POST]

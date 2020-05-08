@@ -41,7 +41,7 @@ class ProposalVote
   }
 
   /**
-   * Creates new user with specified parameters
+   * Adds votes to database
    *
    * @return array
    */

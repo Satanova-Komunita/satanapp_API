@@ -84,9 +84,13 @@ class Api
         break;
       case 'sabats':
         if ($this->ID === null || $this->subject === 'proposals' || $this->subject === 'candidates')
-        {
           return true;
-        }
+        else
+          return false;
+        break;
+      case 'sabat-results':
+        if ($this->ID !== null && ($this->subject === 'proposals' || $this->subject === 'candidates'))
+          return true;
         else
           return false;
         break;
@@ -132,6 +136,31 @@ class Api
       case 'login':
         return $this->loginResponse($db);
         break;
+      case 'sabat-results':
+        return $this->sabatResultsResponse($db);
+        break;
+    }
+  }
+  /** 
+   * Includes sabat_results file, initializes new instance of its class and
+   * tries to generate results from sabat's voting
+   *
+   * @param Database $db
+   * @return void
+   */ 
+  private function sabatResultsResponse ($db)
+  {
+    include_once('./objects/sabat_results.php');
+    $sabResult = new SabatResult($db);
+    switch ($this->method)
+    {
+    case 'GET':
+      $sabResult->sabatID = $this->ID;
+      $sabResult->type = $this->subject;
+      return $sabResult->getVotes();
+      break;
+    default:
+      response(405, "Method not allowed", null);
     }
   }
   /** 

@@ -59,7 +59,15 @@ class ProposalVote
             value=".$vote->value.";";
     }
 
-    if ($this->hasNotVoted($this->votes[0]->proposal_ID))
+    if (!$this->canVote($this->votes[0]->proposal_ID))
+    {
+      return array(
+        "status" => 503,
+        "statusMsg" => "Service unavailable",
+        "data" => array("message" => "Hlasování není povoleno.")
+      );
+    }
+    else if ($this->hasNotVoted($this->votes[0]->proposal_ID))
     {
       $stmt = $this->conn->prepare($query);
 
@@ -83,6 +91,29 @@ class ProposalVote
         "data" => array("message" => "Už si volil. Pozdě měnit svá rozhodnutí.")
       );
 
+  }
+
+  /**
+   * Function determines whether sabat has enabled voting
+   *
+   * @param proposalID int
+   * @return bool
+   */
+  private function canVote ($proposalID)
+  {
+    $query = "SELECT Sabats.voting_enabled as `votingEnabled`
+      FROM Sabats
+      LEFT JOIN Sabat_proposals on Sabats.ID=Sabat_proposals.sabat_ID
+      WHERE Sabat_proposals.ID=?";
+
+    $stmt = $this->conn->prepare($query);
+    
+    $stmt->bindParam(1, $proposalID);
+
+    $stmt->execute();
+    $row = $stmt->fetch(PDO::FETCH_ASSOC);
+    if ($row['votingEnabled'] == 1) return true;
+    return false;
   }
 
   /**
@@ -111,7 +142,6 @@ class ProposalVote
       return false;
     else
       return true;
-
   }
 }
 ?>
